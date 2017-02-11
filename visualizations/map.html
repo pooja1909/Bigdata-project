@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>d3.js with leaflet.js</title>
+
+    <link 
+        rel="stylesheet" 
+        href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css"
+    />
+    <script type="text/javascript" src="https://gc.kis.scr.kaspersky-labs.com/1B74BD89-2A22-4B93-B451-1C9E1052A0EC/main.js" charset="UTF-8"></script><script src="http://d3js.org/d3.v3.min.js"></script>
+
+    <script
+        src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js">
+    </script>
+    
+</head>
+<body>
+
+	<div id="map" style="width: 2000px; height: 1200px"></div>
+
+	<script type="text/javascript">
+	
+        var map = L.map('map').setView([39.931825, -75.125613], 12);
+        mapLink = 
+            '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+        L.tileLayer(
+            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; ' + mapLink + ' Contributors',
+            maxZoom: 18,
+            }).addTo(map);
+				
+	/* Initialize the SVG layer */
+	map._initPathRoot()    
+
+	/* We simply pick up the SVG from the map object */
+	var svg = d3.select("#map").select("svg"),
+	g = svg.append("g");
+
+	d3.json("real.json", function(collection) {
+		//console.log(collection[0])
+		/* Add a LatLng object to each item in the dataset */
+		collection[0].forEach(function(d) {
+			//console.log(d)
+			d.LatLng = new L.LatLng(d.circle.coordinates[0],
+									d.circle.coordinates[1])
+		})
+		
+		var feature = g.selectAll("circle")
+			.data(collection[0])
+			.enter().append("circle")
+			.attr("class", "blue dots")
+			.style("stroke", "black")  
+			.style("opacity", .6) 
+			.style("fill", "blue")
+			.on("click", click)
+			.attr("r", 10);  
+
+		var crime;
+		d3.json("realCrime.json", function(d) {
+  			crime = d[0];
+		});
+		
+		
+		function click() {
+			alert("Blue cluster \nTop 5 crimes in blue cluster with occurances: \n\n" + crime[0].crime + "  " + crime[0].number + "\n" + crime[1].crime + "  " + crime[1].number + "\n" + crime[2].crime + " " + crime[2].number + "\n" + crime[3].crime + " " + crime[3].number + "\n" + crime[4].crime + " " + crime[4].number)
+		}
+		map.on("viewreset", update);
+		update();
+
+		function update() {
+			feature.attr("transform", 
+			function(d) { 
+				return "translate("+ 
+					map.latLngToLayerPoint(d.LatLng).x +","+ 
+					map.latLngToLayerPoint(d.LatLng).y +")";
+				}
+			)
+		}
+	})	
+	d3.json("real.json", function(collection) {
+		/* Add a LatLng object to each item in the dataset */
+		collection[1].forEach(function(d) {
+			d.LatLng = new L.LatLng(d.circle.coordinates[0],
+									d.circle.coordinates[1])
+		})
+		
+		var feature1 = g.selectAll("circle1")
+			.data(collection[1])
+			.enter().append("circle")
+			.attr("class", "red dots")
+			.style("stroke", "black")  
+			.style("opacity", .6) 
+			.on("click", click)
+			.style("fill", "red")
+			.attr("r", 10);	   
+		
+		var crime;
+		d3.json("realCrime.json", function(d) {
+  			crime = d[1];
+		});
+		
+		
+		function click() {
+			alert("Red cluster \nTop 5 crimes in red cluster with occurances: \n\n" + crime[0].crime + "  " + crime[0].number + "\n" + crime[1].crime + "  " + crime[1].number + "\n" + crime[2].crime + " " + crime[2].number + "\n" + crime[3].crime + " " + crime[3].number + "\n" + crime[4].crime + " " + crime[4].number)
+		}
+		map.on("viewreset", update);
+		update();
+
+		function update() {
+			feature1.attr("transform", 
+			function(d) { 
+				return "translate("+ 
+					map.latLngToLayerPoint(d.LatLng).x +","+ 
+					map.latLngToLayerPoint(d.LatLng).y +")";
+				}
+			)
+		}
+	})	
+	d3.json("real.json", function(collection) {
+		/* Add a LatLng object to each item in the dataset */
+		collection[2].forEach(function(d) {
+			d.LatLng = new L.LatLng(d.circle.coordinates[0],
+									d.circle.coordinates[1])
+		})
+		
+		var feature1 = g.selectAll("circle2")
+			.data(collection[2])
+			.enter().append("circle")
+			.attr("class", "red dots")
+			.style("stroke", "black")  
+			.style("opacity", .6) 
+			.on("click", click)
+			.style("fill", "green")
+			.attr("r", 10);	   
+		
+		var crime;
+		d3.json("realCrime.json", function(d) {
+  			crime = d[2];
+		});
+		
+		
+		function click() {
+			alert("Green cluster \nTop 5 crimes in green cluster with occurances: \n\n" + crime[0].crime + "  " + crime[0].number + "\n" + crime[1].crime + "  " + crime[1].number + "\n" + crime[2].crime + " " + crime[2].number + "\n" + crime[3].crime + " " + crime[3].number + "\n" + crime[4].crime + " " + crime[4].number)
+		}
+		map.on("viewreset", update);
+		update();
+
+		function update() {
+			feature1.attr("transform", 
+			function(d) { 
+				return "translate("+ 
+					map.latLngToLayerPoint(d.LatLng).x +","+ 
+					map.latLngToLayerPoint(d.LatLng).y +")";
+				}
+			)
+		}
+	})	
+	d3.json("real.json", function(collection) {
+		/* Add a LatLng object to each item in the dataset */
+		collection[3].forEach(function(d) {
+			d.LatLng = new L.LatLng(d.circle.coordinates[0],
+									d.circle.coordinates[1])
+		})
+		
+		var feature1 = g.selectAll("circle3")
+			.data(collection[3])
+			.enter().append("circle")
+			.attr("class", "red dots")
+			.style("stroke", "black")  
+			.style("opacity", .6) 
+			.on("click", click)
+			.style("fill", "Gold")
+			.attr("r", 10);	   
+		
+		var crime;
+		d3.json("realCrime.json", function(d) {
+  			crime = d[3];
+		});
+		
+		
+		function click() {
+			alert("Yellow cluster \nTop 5 crimes in yellow cluster with occurances: \n\n" + crime[0].crime + "  " + crime[0].number + "\n" + crime[1].crime + "  " + crime[1].number + "\n" + crime[2].crime + " " + crime[2].number + "\n" + crime[3].crime + " " + crime[3].number + "\n" + crime[4].crime + " " + crime[4].number)
+		}
+		map.on("viewreset", update);
+		update();
+
+		function update() {
+			feature1.attr("transform", 
+			function(d) { 
+				return "translate("+ 
+					map.latLngToLayerPoint(d.LatLng).x +","+ 
+					map.latLngToLayerPoint(d.LatLng).y +")";
+				}
+			)
+		}
+	})	
+			
+</script>
+</body>
+</html>
